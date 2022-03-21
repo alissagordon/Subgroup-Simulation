@@ -1,0 +1,82 @@
+###Code by Alissa Gordon###
+
+## creating subgroups##
+library(e1071) #package for distributions
+n<-170#whatever was found in sample size calculator
+
+groupdivision<-function(){
+  N<-2*n #uses sample size that includes both treatments
+  subgroup<-0 #establish variable subgroup
+  #g1-g12 used to count, start off at 0
+  g1<-0 
+  g2<-0
+  g3<-0
+  g4<-0
+  g5<-0
+  g6<-0
+  g7<-0
+  g8<-0
+  g9<-0
+  g10<-0
+  g11<-0
+  g12<-0
+  
+  #for loop 1 to 10,000 just to set up enough replications as needed
+  for (i in 1:10000){
+    #while loop so that code runs until g1-g4 all have exactly N as group size
+    while(g1<N||g2<N||g3<N||g4<N){
+      #subgroup each loop determined by random discrete probability from the given probabilities
+      subgroup[i]<-rdiscrete(1, probs=c(0.4, 0.1,0.1,0.1,0.06,0.06,0.05,0.03,0.03,0.03,0.02,0.02))
+      
+      #for groups 1-4, value is only counted in group size if group size is still less than N
+      if (subgroup[i]==1 & g1<N){
+        g1<-g1+1
+      }
+      if (subgroup[i]==2 & g2<N){
+        g2<-g2+1
+      }
+      if (subgroup[i]==3 & g3<N){
+        g3<-g3+1
+      }
+      if (subgroup[i]==4 & g4<N){
+        g4<-g4+1
+      }
+      
+      #for groups 5-12, value is always counted in group size
+      if (subgroup[i]==5){
+        g5<-g5+1
+      }
+      if (subgroup[i]==6){
+        g6<-g6+1
+      }
+      if (subgroup[i]==7){
+        g7<-g7+1
+      }
+      if (subgroup[i]==8){
+        g8<-g8+1
+      }
+      if (subgroup[i]==9){
+        g9<-g9+1
+      }
+      if (subgroup[i]==10){
+        g10<-g10+1
+      }
+      if (subgroup[i]==11){
+        g11<-g11+1
+      }
+      if (subgroup[i]==12){
+        g12<-g12+1
+      }
+    }
+  }
+  
+  groups<-data.frame(g1, g2, g3, g4, g5, g6, g7, g8, g9, g10, g11, g12)
+  total<-sum(groups) #finds grand total of all subgroup sizes
+  return(total) #function returns total
+}
+
+#code to create histogram of totals
+totals<-replicate(1000, groupdivision()) #creates variable 'totals', which stores 1000 theoreticial grand totals
+hist(totals, labels=TRUE) #histogram of the totals
+max(totals) #max theoretical value of total
+min(totals) #min theoretical value of total
